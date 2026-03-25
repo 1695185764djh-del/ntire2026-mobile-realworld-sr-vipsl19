@@ -34,4 +34,7 @@ python eval.py --input /path/to/test_LR --output /path/to/sr --scale 4
 ## Weight file used
 
 - `model_zoo/19_PLKSRRep_IQAv2Short/net_g_1000.pth`
+
+## License
+
 This project is licensed under the MIT License.
