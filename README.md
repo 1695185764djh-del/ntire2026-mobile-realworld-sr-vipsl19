@@ -28,6 +28,9 @@ If you use this code or build upon our method, please cite:
 - `scripts/` — inference helper scripts
 - `test.py` — inference entry
 - `eval.py` — quick output format check
+- `inference.ipynb` — Set5 batch inference demo
+- `export_onnx.py` — ONNX export and numerical validation
+- `export_coreml.py` — Core ML export with Xcode-previewable image I/O
 - `requirements.txt` — Python dependencies
 - `LICENSE` — MIT license
 
@@ -79,6 +82,60 @@ python test.py --input /path/to/test_LR --output /path/to/sr \
   --gpu 0 --fp16 0 --prepad 16
 ```
 
+## Model Export
+
+The export scripts use the same PLKSR-Rep architecture and checkpoint loading logic as the inference entry. Generated models are saved under `exports/`, which is excluded from Git.
+
+Install the optional export dependencies. The pinned NumPy, ML Dtypes, and OpenCV versions retain compatibility with the tested PyTorch 2.1 environment:
+
+```bash
+python -m pip install \
+  "numpy==1.26.4" "ml_dtypes==0.5.4" "opencv-python==4.11.0.86" \
+  onnx onnxruntime coremltools
+```
+
+### Export ONNX
+
+Export a fixed 64x64 LR input model (the output is 256x256):
+
+```bash
+python export_onnx.py
+```
+
+Export with dynamic LR height and width:
+
+```bash
+python export_onnx.py --dynamic
+```
+
+The default output is `exports/plksr_rep_x4.onnx`. The script runs the ONNX checker and compares the exported model against PyTorch with ONNX Runtime. Use `--height`, `--width`, `--opset`, and `--output` to customize the export.
+
+### Export Core ML
+
+Export an FP16 ML Program with a 64x64 RGB image input and a 256x256 RGB image output:
+
+```bash
+python export_coreml.py
+```
+
+The default output is `exports/plksr_rep_x4.mlpackage`. Its image input/output interface supports dragging an image directly into Xcode Model Preview. Input pixel values are normalized from 0-255 to 0-1 inside the model, and the output is converted back to an RGB image in the 0-255 range.
+
+Export a flexible-size image model:
+
+```bash
+python export_coreml.py --flexible --min-size 16 --max-size 2048
+```
+
+Export a MultiArray input/output variant for tensor-based integration:
+
+```bash
+python export_coreml.py \
+  --tensor-io \
+  --output exports/plksr_rep_x4_tensor.mlpackage
+```
+
+Use `--fp32` to retain FP32 compute precision. Core ML conversion can run on Linux, but model prediction and Xcode Preview must be validated on macOS or iOS with the Core ML runtime.
+
 ## Quick Output Check
 
 ```bash
@@ -107,4 +164,3 @@ The `ntire2026-final` release includes:
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](./LICENSE).
-
