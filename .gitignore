@@ -1,0 +1,59 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Packaging and build output
+build/
+dist/
+*.egg-info/
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Datasets and generated results
+/data/
+/datasets/
+/outputs/
+/output/
+/results/
+/experiments/
+/runs/
+/wandb/
+/tensorboard/
+
+# Model checkpoints and exported models
+/model_zoo/
+/checkpoints/
+*.pth
+*.pt
+*.ckpt
+*.engine
+
+# Generated archives
+*.zip
+*.tar
+*.tar.gz
+*.tgz
